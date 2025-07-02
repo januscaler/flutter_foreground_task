@@ -21,6 +21,7 @@ import com.pravera.flutter_foreground_task.utils.ForegroundServiceUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import android.content.pm.ServiceInfo
 
 /**
  * A service class for implementing foreground service.
