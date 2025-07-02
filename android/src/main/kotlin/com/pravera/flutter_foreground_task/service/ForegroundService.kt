@@ -254,6 +254,41 @@ class ForegroundService : Service() {
         unregisterReceiver(broadcastReceiver)
     }
 
+    private fun describeForegroundServiceTypes(type: Int): String {
+    val types = mutableListOf<String>()
+
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC != 0) {
+        types.add("DATA_SYNC")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK != 0) {
+        types.add("MEDIA_PLAYBACK")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL != 0) {
+        types.add("PHONE_CALL")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION != 0) {
+        types.add("LOCATION")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE != 0) {
+        types.add("CONNECTED_DEVICE")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION != 0) {
+        types.add("MEDIA_PROJECTION")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA != 0) {
+        types.add("CAMERA")
+    }
+    if (type and ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE != 0) {
+        types.add("MICROPHONE")
+    }
+    if (types.isEmpty()) {
+        types.add("NONE or UNKNOWN")
+    }
+
+    return types.joinToString(separator = " | ")
+}
+
+
     @SuppressLint("WrongConstant", "SuspiciousIndentation")
     private fun startForegroundService() {
         RestartReceiver.cancelRestartAlarm(this)
@@ -265,6 +300,7 @@ class ForegroundService : Service() {
         val serviceId = notificationOptions.serviceId
         val notification = createNotification()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Log.v("ForegroundService", "Service Type: ${describeForegroundServiceTypes(foregroundServiceTypes.value)}")
             startForeground(serviceId, notification, foregroundServiceTypes.value)
         } else {
             startForeground(serviceId, notification)
